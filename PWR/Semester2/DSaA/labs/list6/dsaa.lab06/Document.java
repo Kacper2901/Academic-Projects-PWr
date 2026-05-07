@@ -180,52 +180,38 @@ public class Document{
         }
     }
 
-    public void merge(int leftStart, int leftEnd, int rightEnd, int[] arr){
-        int[] left= new int[leftEnd - leftStart + 1];
-        int[] right= new int[rightEnd - (leftEnd + 1) + 1];
-
-        int i = 0;
-        int j = 0;
-
-        while(leftStart + i <= leftEnd){
-            left[i] = arr[leftStart + i];
-            i++;
-        }
-        while(leftEnd + 1 + j <= rightEnd){
-            right[j] = arr[leftEnd + 1 + j];
-            j++;
+    public void merge(int leftStart, int mid, int rightEnd, int[] arr, int[] temp){
+        for(int i = leftStart; i <= rightEnd; i++){
+            temp[i] = arr[i];
         }
 
-        int leftSize = left.length;
-        int rightSize = right.length;
+        int i = leftStart;
+        int j = mid + 1;
+        int curr = leftStart;
 
-        i = 0;
-        j = 0;
-        int a = 0;
-
-        while(i < leftSize && j < rightSize){
-            if(left[i] <= right[j]){
-                arr[leftStart + a] = left[i];
+        while(i <= mid && j<=rightEnd){
+            if(temp[i] <= temp[j]){
+                arr[curr] = temp[i];
+                curr++;
                 i++;
             }
             else{
-                arr[leftStart + a] = right[j];
+                arr[curr] = temp[j];
+                curr++;
                 j++;
-
             }
-            a++;
         }
 
-        while(i <leftSize){
-            arr[leftStart + a] = left[i];
+        while(i <= mid){
+            arr[curr] = temp[i];
+            curr++;
             i++;
-            a++;
         }
 
-        while(j < rightSize){
-            arr[leftStart + a] = right[j];
+        while(j <= rightEnd){
+            arr[curr] = temp[j];
+            curr++;
             j++;
-            a++;
         }
     }
 
@@ -233,24 +219,20 @@ public class Document{
 	public void iterativeMergeSort(int[] arr) {
 		showArray(arr);
         int arrLength = arr.length;
+        int[] temp = new int[arrLength];
         for(int currSize = 1; currSize <= arrLength-1; currSize *= 2){
-
             for(int leftStart = 0; leftStart < arrLength - 1; leftStart+=currSize*2) {
-                int leftEnd = Math.min(leftStart + currSize - 1, arrLength -1);
-                int rightEnd = Math.min(leftEnd + currSize,arrLength - 1);
+                int mid = Math.min(leftStart + currSize - 1, arrLength -1);
+                int rightEnd = Math.min(mid + currSize,arrLength - 1);
 
-                merge(leftStart, leftEnd, rightEnd, arr);
+                merge(leftStart, mid, rightEnd, arr, temp);
             }
             showArray(arr);
-
-
         }
-
-		//TODO
 	}
 
     private int getDigitByPlace(int exp, int number){
-        return (number / (int)Math.pow(10,exp)) %10;
+        return (number / exp) %10;
     }
 
      private int findMax(int[] arr) {
@@ -267,7 +249,7 @@ public class Document{
 		showArray(arr);
         if(arr.length == 0) return;
 //        int maxValDigits = Integer.toString(findMax(arr)).length();
-        for(int i = 0; i < 3; i++){
+        for(int i = 1; i <=100; i*=10){
             sortByNthDigit(i,arr);
             showArray(arr);
         }
