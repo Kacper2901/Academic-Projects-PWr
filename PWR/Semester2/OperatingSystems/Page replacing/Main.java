@@ -1,31 +1,45 @@
 public class Main {
-    public static  int RAM_SIZE = 50;
-    public static  int DISK_SIZE = 500;
+    public static  int RAM_SIZE;
+    public static  int DISK_SIZE = 1000;
     public static  int PAGE_REQUESTS_CAPACITY = 1000;
-    public static  int LOCALITY_DELTA = 10;
+    public static int N = 30;
 
-    public static void runTest(int ramSize, int delta) {
+    public static void runTest(int ramSize, String text) {
         Main.RAM_SIZE = ramSize;
-        Main.LOCALITY_DELTA = delta;
         Simulation sim = new Simulation();
-        sim.setPageRequests();
+        int fifoTotal = 0;
+        int alruTotal = 0;
+        int lruTotal = 0;
+        int optTotal = 0;
+        int randTotal = 0;
+        for(int i = 0; i<N; i++){
 
-        System.out.println(String.format("--- TEST: RAM=%d, Delta=%d ---", ramSize, delta));
-        System.out.println("FIFO: " + sim.FIFO());
-        sim.ram.resetFrames();
-        System.out.println("ALRU: " + sim.ALRU());
-        sim.ram.resetFrames();
-        System.out.println("LRU:  " + sim.LRU());
-        sim.ram.resetFrames();
-        System.out.println("OPT:  " + sim.OPT());
-        sim.ram.resetFrames();
-        System.out.println("RAND: " + sim.RAND());
+            sim.setPageRequests();
+            fifoTotal+=sim.FIFO();
+            sim.ram.resetFrames();
+            alruTotal += sim.ALRU();
+            sim.ram.resetFrames();
+            lruTotal += sim.LRU();
+            sim.ram.resetFrames();
+            optTotal += sim.OPT();
+            sim.ram.resetFrames();
+            randTotal += sim.RAND();
+            sim.ram.resetFrames();
+        }
+        System.out.println(String.format("--- "+ text.toUpperCase() + " AVARAGE AFTER %d SIMULATIONS: RAM=%d ---",N, ramSize));
+        System.out.printf("FIFO: %.2f%n", (double)fifoTotal/N);
+        System.out.printf("ALRU: %.2f%n", (double)alruTotal/N);
+        System.out.printf("LRU: %.2f%n" ,(double)lruTotal/N);
+        System.out.printf("OPT: %.2f%n", (double)optTotal/N);
+        System.out.printf("RAND: %.2f%n", (double)randTotal/N);
         System.out.println();
     }
 
     public static void main(String[] args) {
-        runTest(100, 5);
-        runTest(30, 15);
-        runTest(5, 50);
+        runTest(14, "base case");
+        runTest(7, "two times less ram");
+        runTest(60, "four times more");
+
+
     }
 }

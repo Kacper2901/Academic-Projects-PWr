@@ -11,10 +11,10 @@ public class RAM {
     }
 
     void resetFrames(){
+        frames.clear();
         for(int i = 0; i < Main.RAM_SIZE; i++){
-            frames.get(i).pageId = -1;
+            frames.add(new Page(-1));
         }
-
     }
 
     int isPageInFrames(Page page){

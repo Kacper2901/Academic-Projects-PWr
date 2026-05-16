@@ -1,9 +1,9 @@
-package dsaa.lab07;
+package dsaa.lab08;
 
 import java.util.LinkedList;
 
 public class HashTable{
-	LinkedList arr[]; // use pure array
+	LinkedList arr[]; 
 	private final static int defaultInitSize=8;
 	private final static double defaultMaxLoadFactor=0.7;
 	private int size;
@@ -18,13 +18,19 @@ public class HashTable{
 
 
 	public HashTable(int initCapacity, double maxLF) {
+
+        if(initCapacity<2)
+
+            initCapacity=2;
+		arr=new LinkedList[initCapacity];
         this.size = initCapacity;
-		this.maxLoadFactor=maxLF;
+        this.maxLoadFactor=maxLF;
         this.currSize = 0;
         arr = new LinkedList[size];
         for (int i = 0; i < size; i++) {
             arr[i] = new LinkedList();
         }
+
 	}
 
 	public boolean add(Object elem) {
@@ -36,13 +42,12 @@ public class HashTable{
             if((double)currSize/arr.length > maxLoadFactor){
                 doubleArray();
             }
-		    return true;
+            return true;
         }
         return false;
 	}
 
-	
-	private void doubleArray() {
+    private void doubleArray() {
 
         HashTable targetHashTable = new HashTable(this.size*2, maxLoadFactor);
         for(int i = 0; i < arr.length; i++){
@@ -53,48 +58,37 @@ public class HashTable{
         this.arr = targetHashTable.arr;
         this.size*=2;
 
-	}
-
+    }
 
 	@Override
 	public String toString() {
-
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < arr.length; i++) {
-            sb.append(i).append(": ");
-            if (arr[i] != null && !arr[i].isEmpty()) {
+        String retString = "";
+        for(int i = 0; i < arr.length; i++) {
+            retString += i + ": ";
+            if (!arr[i].isEmpty()) {
                 for (int j = 0; j < arr[i].size(); j++) {
                     IWithName doc = (IWithName) arr[i].get(j);
-                    sb.append(doc.getName());
-
+                    retString += doc.getName();
                     if (j < arr[i].size() - 1) {
-                        sb.append(", ");
+                        retString += ", ";
                     }
                 }
             }
-            sb.append("\n");
+            retString += "\n";
         }
-        return sb.toString();
+
+        return retString;
 	}
 
 	public Object get(Object toFind) {
-		int key = toFind.hashCode()%arr.length;
+        int key = toFind.hashCode()%arr.length;
         for(Object elem: arr[key]){
             if(toFind.equals(elem)){
                 return elem;
             }
         }
-		return null;
+        return null;
 	}
-
-    public int maxLength(){
-        if(arr.length == 0) return 0;
-        int maxLength = arr[0].size();
-        for(int i = 1; i < arr.length; i++){
-            int currListSize = arr[i].size();
-            if(currListSize > maxLength) maxLength = currListSize;
-        }
-        return maxLength;
-    }
+	
 }
 

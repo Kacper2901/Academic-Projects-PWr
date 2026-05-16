@@ -1,9 +1,20 @@
-package dsaa.lab07;
+package dsaa.lab08;
 import java.util.*;
 
 
+
+
+
 public class Main {
+    static BST<Integer> tree = new BST<>();
+
+
+
 	static Scanner scan; // for input stream
+
+
+
+
 
 	public static void main(String[] args) {
 		System.out.println("START");
@@ -57,10 +68,18 @@ public class Main {
 					System.out.println("no current document");
 				continue;
 			}			
-			// reverse
-			if(word[0].equalsIgnoreCase("reverse") && word.length==1) {
+			// postorder
+			if(word[0].equalsIgnoreCase("postorder") && word.length==1) {
 				if(currentDoc!=null)
-					System.out.println(currentDoc.toStringReverse());
+					System.out.println(currentDoc.toStringPostOrder());
+				else
+					System.out.println("no current document");
+				continue;
+			}		
+			// preorder
+			if(word[0].equalsIgnoreCase("preorder") && word.length==1) {
+				if(currentDoc!=null)
+					System.out.println(currentDoc.toStringPreOrder());
 				else
 					System.out.println("no current document");
 				continue;
@@ -86,15 +105,14 @@ public class Main {
 					System.out.println("no current document");
 				continue;				
 			}		
-			// get index
+			// get str
 			if(word[0].equalsIgnoreCase("get") && word.length==2) {
 				if(currentDoc!=null) {
-					int index=Integer.parseInt(word[1]);
-					try {
-						Link l=currentDoc.link.get(index);
-						System.out.println(l.ref);
+					Link l=currentDoc.link.getElement(new Link(word[1]));
+					if(l!=null) {
+						System.out.println(l);
 					}
-					catch(NoSuchElementException e) {
+					else {
 						System.out.println("error");
 					}
 				}
@@ -102,26 +120,14 @@ public class Main {
 					System.out.println("no current document");					
 				continue;
 			}					
-			// index str
-			if(word[0].equalsIgnoreCase("index") && word.length==2) {
+			// successor str
+			if(word[0].equalsIgnoreCase("successor") && word.length==2) {
 				if(currentDoc!=null) {
-					int index=currentDoc.link.indexOf(new Link(word[1]));
-					System.out.println(index);
-				}
-				else
-					System.out.println("no current document");					
-
-				continue;
-			}	
-			// remi index
-			if(word[0].equalsIgnoreCase("remi") && word.length==2) {
-				if(currentDoc!=null) {
-					int index=Integer.parseInt(word[1]);
-					try {
-						Link l=currentDoc.link.remove(index);
+					Link l=currentDoc.link.successor(new Link(word[1]));
+					if(l!=null) {
 						System.out.println(l);
 					}
-					catch(NoSuchElementException e) {
+					else {
 						System.out.println("error");
 					}
 				}
@@ -129,23 +135,23 @@ public class Main {
 					System.out.println("no current document");					
 
 				continue;
-			}	
+			}
+
+
 			// rem str
 			if(word[0].equalsIgnoreCase("rem") && word.length==2) {
 				if(currentDoc!=null) {
-					System.out.println(currentDoc.link.remove(new Link(word[1])));
+					Link l=currentDoc.link.remove(new Link(word[1]));
+					if(l!=null) {
+						System.out.println(l);
+					}
+					else {
+						System.out.println("error");
+					}
 				}
 				else
 					System.out.println("no current document");					
-				continue;
-			}				
-			// remall str
-			if(word[0].equalsIgnoreCase("remall") && word.length==2) {
-				if(currentDoc!=null) {
-					currentDoc.link.removeAll(new Link(word[1]));
-				}
-				else
-					System.out.println("no current document");	
+
 				continue;
 			}	
 			// ht - show hashtable
@@ -154,21 +160,12 @@ public class Main {
 				continue;
 			}
 
-            //changed
-            // ht - show hashtable
-            if(word[0].equalsIgnoreCase("hash") && word.length==2) {
-                Document doc = new Document(word[1]);
-                System.out.print(doc.hashCode());
+            if(word[0].equalsIgnoreCase("twoChildren") && word.length==1) {
+                System.out.println(currentDoc.link.twoChildren());
                 continue;
             }
 
-            if(word[0].equalsIgnoreCase("maxLen") && word.length==1) {
-                System.out.println(hashTable.maxLength());
-
-            }
-
-
-			System.out.println("Wrong command");			
+            System.out.println("Wrong command");
 		}
 		System.out.println("END OF EXECUTION");
 		scan.close();
