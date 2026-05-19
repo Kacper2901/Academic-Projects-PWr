@@ -93,4 +93,33 @@ public class DisjointSetLinkedList implements DisjointSetDataStructure {
 		return sb.toString();
 	}
 
+    @Override
+    public void split(int elem){
+        int representantA = arr[elem].representant;
+        if(arr[representantA].length <= 1) return;
+
+        int sizeB = arr[representantA].length / 2;
+        int sizeA = (arr[representantA].length % 2 == 0) ? sizeB : sizeB + 1;
+
+
+        int currA = representantA;
+        for(int i = 1; i < sizeA; i++){
+            arr[currA].length = sizeA;
+            currA = arr[currA].next;
+        }
+        int representantB = arr[currA].next;
+        arr[currA].length = sizeA;
+        arr[currA].next = -1;
+        arr[representantB].last = arr[representantA].last;
+        arr[representantA].last = currA;
+
+        int currB = representantB;
+        for(int i = 1; i <= sizeB; i++){
+            arr[currB].representant = representantB;
+            arr[currB].length = sizeB;
+            currB = arr[currB].next;
+        }
+
+
+    }
 }

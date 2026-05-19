@@ -71,4 +71,9 @@ public class DisjointSetForest implements DisjointSetDataStructure {
         sb.setLength(sb.length() - 1);
         return sb.toString();
     }
+
+    @Override
+    public void split(int elem){
+        return;
+    }
 }

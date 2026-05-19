@@ -71,6 +71,14 @@ public class Main {
 				System.out.println(dsds[currentPos].union(itemA,itemB));
 				continue;
 			}
+
+            if(word[0].equalsIgnoreCase("split") && word.length==2) {
+                int itemA=Integer.parseInt(word[1]);
+                dsds[currentPos].split(itemA);
+                continue;
+            }
+
+
 			System.out.println("Wrong command");			
 		}
 		System.out.println("END OF EXECUTION");
